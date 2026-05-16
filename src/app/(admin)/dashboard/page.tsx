@@ -11,7 +11,7 @@ export default async function DashboardPage() {
 
   const { data: recentProducts } = await supabase
     .from('products')
-    .select('id, name, slug, price, created_at, categories(title, slug)')
+    .select('id, name, slug, estimated_cost, product_code, created_at, categories(title, slug)')
     .order('created_at', { ascending: false })
     .limit(5)
 
@@ -67,7 +67,7 @@ export default async function DashboardPage() {
                 <div className="flex-1">
                   <div className="font-medium text-slate-900 text-sm">{p.name}</div>
                   <div className="text-xs text-slate-400 mt-0.5">
-                    {category?.title} · {p.price ? <span dir="ltr">${p.price}</span> : 'السعر عند الطلب'}
+                    {category?.title} · {p.estimated_cost ? <span>{p.estimated_cost} ج.م</span> : 'السعر عند الطلب'}
                   </div>
                 </div>
                 <Link

@@ -12,7 +12,9 @@ import type { Category } from '@/types/database.types'
 const schema = z.object({
   name: z.string().min(3, 'الاسم يجب أن يكون 3 حروف على الأقل'),
   description: z.string().optional(),
-  price: z.string().optional().or(z.literal('')),
+  supplier: z.string().optional(),
+  product_code: z.string().optional(),
+  estimated_cost: z.string().optional().or(z.literal('')),
   categoryId: z.string().uuid('يرجى اختيار قسم صحيح'),
 })
 
@@ -37,7 +39,7 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
   const { register, handleSubmit, reset, formState: { errors, isSubmitting } } = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      price: '',
+      estimated_cost: '',
     }
   })
 
@@ -53,7 +55,9 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
         reset({
           name: product.name,
           description: product.description || '',
-          price: product.price ? product.price.toString() : '',
+          supplier: product.supplier || '',
+          product_code: product.product_code || '',
+          estimated_cost: product.estimated_cost ? product.estimated_cost.toString() : '',
           categoryId: product.category_id,
         })
         if (product.images) {
@@ -112,14 +116,16 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
       
       const allImages = [...existingImages, ...newImageUrls]
       
-      const priceNum = values.price ? parseFloat(values.price) : null
+      const costNum = values.estimated_cost ? parseFloat(values.estimated_cost) : null
       const autoSlug = values.name.trim().toLowerCase().replace(/\s+/g, '-')
 
       const { error } = await supabase.from('products').update({
         name: values.name,
         slug: autoSlug,
         description: values.description || null,
-        price: priceNum,
+        supplier: values.supplier || null,
+        product_code: values.product_code || null,
+        estimated_cost: costNum,
         category_id: values.categoryId,
         images: allImages,
       }).eq('id', productId)
@@ -244,16 +250,34 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
               </div>
 
               <div>
-                <label className="block text-sm font-medium text-slate-700 mb-1.5">السعر (بالدولار) - اختياري</label>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">المورد - اختياري</label>
+                <input 
+                  {...register('supplier')} 
+                  placeholder="اسم المورد" 
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all" 
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">كود المنتج - اختياري</label>
+                <input 
+                  {...register('product_code')} 
+                  placeholder="مثال: PRD-001" 
+                  className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-left" 
+                  dir="ltr"
+                />
+              </div>
+
+              <div>
+                <label className="block text-sm font-medium text-slate-700 mb-1.5">التكلفة التقديرية - اختياري</label>
                 <div className="relative">
                   <input 
-                    {...register('price')} 
+                    {...register('estimated_cost')} 
                     type="text" 
                     placeholder="0.00" 
                     className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-left" 
                     dir="ltr"
                   />
-                  <span className="absolute left-3 top-2.5 text-slate-400 text-sm pointer-events-none">$</span>
                 </div>
               </div>
             </div>

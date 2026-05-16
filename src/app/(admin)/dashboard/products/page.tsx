@@ -32,7 +32,7 @@ export default async function ProductsPage() {
               <tr className="border-b border-slate-200 bg-slate-50/80">
                 <th className="text-right px-6 py-4 font-bold text-slate-700 whitespace-nowrap">المنتج</th>
                 <th className="text-right px-6 py-4 font-bold text-slate-700 whitespace-nowrap">القسم</th>
-                <th className="text-right px-6 py-4 font-bold text-slate-700 whitespace-nowrap">السعر</th>
+                <th className="text-right px-6 py-4 font-bold text-slate-700 whitespace-nowrap">التكلفة / الكود</th>
                 <th className="text-right px-6 py-4 font-bold text-slate-700 whitespace-nowrap">الرابط (Slug)</th>
                 <th className="text-left px-6 py-4 font-bold text-slate-700 whitespace-nowrap">خيارات</th>
               </tr>
@@ -56,7 +56,10 @@ export default async function ProductsPage() {
                     </div>
                   </td>
                   <td className="px-6 py-4 text-slate-500">{category?.title ?? '—'}</td>
-                  <td className="px-6 py-4 text-slate-700" dir="ltr">{p.price ? `$${p.price}` : '—'}</td>
+                  <td className="px-6 py-4 text-slate-700">
+                    {p.estimated_cost ? <div className="font-medium">{p.estimated_cost} ج.م</div> : '—'}
+                    {p.product_code && <div className="text-xs text-slate-400 font-mono mt-1" dir="ltr">{p.product_code}</div>}
+                  </td>
                   <td className="px-6 py-4">
                     <code className="text-xs bg-slate-100 px-2 py-1 rounded text-slate-600 font-mono" dir="ltr">{p.slug}</code>
                   </td>

@@ -75,8 +75,8 @@ export default async function ProductPage(props: PageProps) {
     offers: {
       '@type': 'Offer',
       availability: 'https://schema.org/InStock',
-      price: product.price || 0,
-      priceCurrency: 'USD',
+      price: product.estimated_cost || 0,
+      priceCurrency: 'EGP',
     },
   }
 
@@ -118,11 +118,17 @@ export default async function ProductPage(props: PageProps) {
               {product.name}
             </h1>
             
-            {product.price && (
+            {product.product_code && (
+              <div className="mb-4 inline-block bg-slate-100 text-slate-600 px-3 py-1 rounded-lg text-sm font-mono border border-slate-200">
+                كود المنتج: <span dir="ltr">{product.product_code}</span>
+              </div>
+            )}
+            
+            {product.estimated_cost && (
               <div className="bg-indigo-600 text-white rounded-2xl p-5 mb-8 shadow-xl shadow-indigo-600/20 inline-block min-w-[200px]">
-                <div className="text-xs opacity-80 mb-1 font-medium">سعر العينة التقريبي</div>
+                <div className="text-xs opacity-80 mb-1 font-medium">التكلفة التقديرية</div>
                 <div className="text-3xl font-black">
-                  <span dir="ltr">${Number(product.price).toFixed(2)}</span>
+                  <span dir="ltr">{Number(product.estimated_cost).toFixed(2)} ج.م</span>
                 </div>
               </div>
             )}
