@@ -4,6 +4,7 @@ export interface Category {
   title: string
   slug: string
   cover_image: string | null
+  order_index?: number
   created_at: string
 }
 
@@ -19,6 +20,7 @@ export interface Product {
   show_product_code: boolean
   show_estimated_cost: boolean
   images: string[]
+  order_index?: number
   created_at: string
   updated_at: string
   categories?: { title: string; slug: string }
