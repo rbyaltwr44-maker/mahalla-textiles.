@@ -16,6 +16,8 @@ export interface Product {
   supplier: string | null
   product_code: string | null
   estimated_cost: number | null
+  show_product_code: boolean
+  show_estimated_cost: boolean
   images: string[]
   created_at: string
   updated_at: string

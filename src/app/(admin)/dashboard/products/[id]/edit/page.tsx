@@ -31,6 +31,8 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
   type ImageItem = { id: string; type: 'existing' | 'new'; url: string; file?: File };
   const [images, setImages] = useState<ImageItem[]>([])
   const [isDragOver, setIsDragOver] = useState(false) 
+  const [showProductCode, setShowProductCode] = useState(true)
+  const [showEstimatedCost, setShowEstimatedCost] = useState(true)
   
   const [isUploading, setIsUploading] = useState(false)
   const [serverError, setServerError] = useState('')
@@ -67,6 +69,8 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
             url
           })))
         }
+        setShowProductCode(product.show_product_code ?? true)
+        setShowEstimatedCost(product.show_estimated_cost ?? true)
       } else if (prodRes.error) {
         setServerError('لم يتم العثور على المنتج')
       }
@@ -141,6 +145,8 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
         supplier: values.supplier || null,
         product_code: values.product_code || null,
         estimated_cost: costNum,
+        show_product_code: showProductCode,
+        show_estimated_cost: showEstimatedCost,
         category_id: values.categoryId,
         images: allImages,
       }).eq('id', productId)
@@ -281,6 +287,16 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
                   className="w-full px-4 py-2.5 border border-slate-200 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 transition-all text-left" 
                   dir="ltr"
                 />
+                <button
+                  type="button"
+                  onClick={() => setShowProductCode(v => !v)}
+                  className={`mt-2 flex items-center gap-2 text-xs font-medium transition-colors ${showProductCode ? 'text-indigo-600' : 'text-slate-400'}`}
+                >
+                  <span className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 transition-colors ${showProductCode ? 'bg-indigo-600 border-indigo-600' : 'bg-slate-200 border-slate-200'}`}>
+                    <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${showProductCode ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </span>
+                  {showProductCode ? 'ظاهر على الموقع' : 'مخفي عن الزوار'}
+                </button>
               </div>
 
               <div>
@@ -294,6 +310,16 @@ export default function EditProductPage(props: { params: Promise<{ id: string }>
                     dir="ltr"
                   />
                 </div>
+                <button
+                  type="button"
+                  onClick={() => setShowEstimatedCost(v => !v)}
+                  className={`mt-2 flex items-center gap-2 text-xs font-medium transition-colors ${showEstimatedCost ? 'text-indigo-600' : 'text-slate-400'}`}
+                >
+                  <span className={`relative inline-flex h-5 w-9 shrink-0 rounded-full border-2 transition-colors ${showEstimatedCost ? 'bg-indigo-600 border-indigo-600' : 'bg-slate-200 border-slate-200'}`}>
+                    <span className={`inline-block h-4 w-4 rounded-full bg-white shadow-sm transform transition-transform ${showEstimatedCost ? 'translate-x-4' : 'translate-x-0'}`} />
+                  </span>
+                  {showEstimatedCost ? 'ظاهر على الموقع' : 'مخفي عن الزوار'}
+                </button>
               </div>
             </div>
 
