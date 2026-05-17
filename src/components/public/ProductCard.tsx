@@ -32,7 +32,7 @@ export default function ProductCard({ product, categorySlug }: { product: Produc
           <p className="text-sm text-slate-500 mb-4 line-clamp-2 flex-1 leading-relaxed">{product.description}</p>
         )}
         <div className="flex items-center justify-between mt-auto pt-3 border-t border-slate-100 flex-row-reverse">
-          {product.estimated_cost ? (
+          {product.estimated_cost && product.show_estimated_cost ? (
             <span className="font-bold text-indigo-600" dir="ltr">{product.estimated_cost.toFixed(2)} ج.م</span>
           ) : (
             <span className="text-xs text-slate-400 flex items-center gap-1">
