@@ -48,7 +48,8 @@ export default async function HomePage() {
     const { data } = await supabase
       .from('categories')
       .select('*')
-      .order('created_at', { ascending: true })
+      .order('order_index', { ascending: true })
+      .order('created_at', { ascending: false })
     fetchedCategories = data
   } catch (e) {
     console.error('Supabase fetch failed:', e)

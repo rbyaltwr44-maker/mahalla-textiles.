@@ -38,11 +38,12 @@ export default async function CategoryPage({ params }: Props) {
 
   if (!category) notFound()
 
-  const { data: products } = await supabase
-    .from('products')
-    .select('*')
-    .eq('category_id', category.id)
-    .order('created_at', { ascending: false })
+    const { data: products } = await supabase
+      .from('products')
+      .select('*')
+      .eq('category_id', category.id)
+      .order('order_index', { ascending: true })
+      .order('created_at', { ascending: false })
 
   return (
     <div className="min-h-screen bg-slate-50 text-right">

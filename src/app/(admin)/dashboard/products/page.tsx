@@ -81,9 +81,9 @@ function ProductsList() {
           <div className="flex items-center gap-3 mt-1">
             <p className="text-slate-500 text-sm">إجمالي المنتجات: {products.length}</p>
             {categoryId && (
-              <Link href="/dashboard/products" className="text-xs flex items-center gap-1 text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded">
+              <a href="/dashboard/products" className="text-xs flex items-center gap-1 text-red-500 hover:text-red-700 bg-red-50 px-2 py-1 rounded">
                 <FilterX className="w-3 h-3" /> إزالة الفلتر
-              </Link>
+              </a>
             )}
           </div>
         </div>
