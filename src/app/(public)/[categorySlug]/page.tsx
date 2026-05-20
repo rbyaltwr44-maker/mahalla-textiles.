@@ -2,6 +2,7 @@ import { Metadata } from 'next'
 import { notFound } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import ProductCard from '@/components/public/ProductCard'
+import Script from 'next/script'
 
 export const revalidate = 3600
 
@@ -45,8 +46,44 @@ export default async function CategoryPage({ params }: Props) {
       .order('order_index', { ascending: true })
       .order('created_at', { ascending: false })
 
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mahalla-textiles.vercel.app'
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'ItemList',
+      itemListElement: products?.map((p, i) => ({
+        '@type': 'ListItem',
+        position: i + 1,
+        url: `${baseUrl}/${categorySlug}/${p.slug}`
+      }))
+    },
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'الرئيسية',
+          item: baseUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: category.title,
+          item: `${baseUrl}/${categorySlug}`,
+        },
+      ],
+    }
+  ]
+
   return (
     <div className="min-h-screen bg-slate-50 text-right">
+      <Script 
+        id="category-schema"
+        type="application/ld+json" 
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} 
+      />
       {/* Category Header */}
       <div className="bg-white border-b border-slate-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">

@@ -66,19 +66,46 @@ export default async function ProductPage(props: PageProps) {
 
   const gallery = product.images ?? []
 
-  const jsonLd = {
-    '@context': 'https://schema.org',
-    '@type': 'Product',
-    name: product.name,
-    description: product.description || `منتج ${product.name} بأسعار الجملة من المحلة الكبرى.`,
-    image: gallery,
-    offers: {
-      '@type': 'Offer',
-      availability: 'https://schema.org/InStock',
-      price: product.estimated_cost || 0,
-      priceCurrency: 'EGP',
+  const baseUrl = process.env.NEXT_PUBLIC_SITE_URL || 'https://mahalla-textiles.vercel.app'
+  const jsonLd = [
+    {
+      '@context': 'https://schema.org',
+      '@type': 'Product',
+      name: product.name,
+      description: product.description || `منتج ${product.name} بأسعار الجملة من المحلة الكبرى.`,
+      image: gallery,
+      offers: {
+        '@type': 'Offer',
+        availability: 'https://schema.org/InStock',
+        price: product.estimated_cost || 0,
+        priceCurrency: 'EGP',
+      },
     },
-  }
+    {
+      '@context': 'https://schema.org',
+      '@type': 'BreadcrumbList',
+      itemListElement: [
+        {
+          '@type': 'ListItem',
+          position: 1,
+          name: 'الرئيسية',
+          item: baseUrl,
+        },
+        {
+          '@type': 'ListItem',
+          position: 2,
+          name: category?.title || 'القسم',
+          item: `${baseUrl}/${categorySlug}`,
+        },
+        {
+          '@type': 'ListItem',
+          position: 3,
+          name: product.name,
+          item: `${baseUrl}/${categorySlug}/${productSlug}`,
+        },
+      ],
+    }
+  ]
 
   return (
     <div className="min-h-screen bg-slate-50 text-right">
